@@ -44,6 +44,14 @@ int main(int argc, char* argv[])
             std::cout << "\n[Status] - Load IniFile from path: " << value << "\n" << std::endl;
 
             writeIniPath(value);  // pass args via a safe mutex variable
+
+
+ /*           int status = ares_library_init(ARES_LIB_INIT_ALL);
+            if (status != ARES_SUCCESS)
+            {
+                printf("C-ARES initialized.\n");                
+            }*/
+
             InitializeApplication(value);     
             return 1;
         }
@@ -57,7 +65,7 @@ int main(int argc, char* argv[])
       
         return 1;
     }
-        
+       
    
     return 0;
 }

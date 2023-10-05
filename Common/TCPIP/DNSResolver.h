@@ -1,5 +1,7 @@
 #pragma once
 
+#include "pch.h"
+
 namespace HM
 {
    class HostNameAndIpAddress;

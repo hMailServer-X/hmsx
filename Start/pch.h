@@ -42,6 +42,14 @@
 #include <functional>
 #include <deque>
 
+
+//
+// C-ARES Includes (DNS-Resolver Library)
+//
+
+#include "ares.h"
+
+
 //
 // BOOST INCLUDES
 //

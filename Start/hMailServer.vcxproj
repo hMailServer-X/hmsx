@@ -138,15 +138,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\Projekte\hMailserver\dev\hMailServerX\Start;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath)</IncludePath>
-    <LibraryPath>$(hMailServerLibs)\openssl-1.1.1u\out32\lib;$(hMailServerLibs)\libpq-10.23.1\libpq-10.23.1\win32_i686\lib;$(hMailServerLibs)\boost_1_72_0_32\lib32-msvc-14.2;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
@@ -168,14 +168,14 @@
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -198,7 +198,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(hMailServerLibs)\msvc\v143\x86_64\openssl\include;$(hMailServerLibs)\msvc\v143\x86_64\openssl\ms;$(hMailServerLibs)\msvc\v143\x86_64\postgres\include;$(hMailServerLibs)\\msvc\v143\x86_64\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(hMailServerLibs)\msvc\v143\x86_64\openssl\include;$(hMailServerLibs)\msvc\v143\x86_64\openssl\ms;$(hMailServerLibs)\msvc\v143\x86_64\postgres\include;$(hMailServerLibs)\msvc\v143\x86_64\boost\include;$(hMailServerLibs)\msvc\v143\x86_64\cares\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;UNICODE;_UNICODE;VC_EXTRALEAN;BOOST_DATE_TIME_NO_LIB;_SCL_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;STRICT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -218,10 +218,10 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>IPHlpAPI.lib;Dnsapi.lib;Ws2_32.lib;libpq.lib;libcrypto.lib;libssl.lib;crypt32.lib;Secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IPHlpAPI.lib;Dnsapi.lib;Ws2_32.lib;libpq.lib;libcrypto.lib;libssl.lib;crypt32.lib;Secur32.lib;cares.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>NotSet</ShowProgress>
       <OutputFile>$(OutDir)hMailServer.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(hMailServerLibs)\msvc\v143\x86_64\openssl\lib;$(hMailServerLibs)\msvc\v143\x86_64\postgres\lib;$(hMailServerLibs)\msvc\v143\x86_64\boost\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(hMailServerLibs)\msvc\v143\x86_64\openssl\lib;$(hMailServerLibs)\msvc\v143\x86_64\postgres\lib;$(hMailServerLibs)\msvc\v143\x86_64\boost\lib;$(hMailServerLibs)\msvc\v143\x86_64\cares\lib</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
@@ -241,7 +241,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(hMailServerLibs)\msvc\v143\i686\openssl\include;$(hMailServerLibs)\msvc\v143\i686\openssl\ms;$(hMailServerLibs)\msvc\v143\i686\postgres\include;$(hMailServerLibs)\\msvc\v143\i686\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(hMailServerLibs)\msvc\v143\i686\openssl\include;$(hMailServerLibs)\msvc\v143\i686\openssl\ms;$(hMailServerLibs)\msvc\v143\i686\postgres\include;$(hMailServerLibs)\msvc\v143\i686\boost\include;$(hMailServerLibs)\msvc\v143\i686\cares\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;UNICODE;_UNICODE;VC_EXTRALEAN;BOOST_DATE_TIME_NO_LIB;_SCL_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;STRICT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -261,10 +261,10 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>libcrypto.lib;libssl.lib;IPHlpAPI.lib;Dnsapi.lib;Ws2_32.lib;libpq.lib;crypt32.lib;Secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;libssl.lib;IPHlpAPI.lib;Dnsapi.lib;Ws2_32.lib;libpq.lib;crypt32.lib;Secur32.lib;cares.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>NotSet</ShowProgress>
       <OutputFile>$(OutDir)hMailServer.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(hMailServerLibs)\msvc\v143\i686\openssl\lib;$(hMailServerLibs)\msvc\v143\i686\postgres\lib;$(hMailServerLibs)\msvc\v143\i686\boost\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(hMailServerLibs)\msvc\v143\i686\openssl\lib;$(hMailServerLibs)\msvc\v143\i686\postgres\lib;$(hMailServerLibs)\msvc\v143\i686\boost\lib;$(hMailServerLibs)\msvc\v143\i686\cares\lib</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
@@ -369,7 +369,7 @@
       </Command>
     </PreBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(hMailServerLibs)\msvc\v143\x86_64\openssl\include;$(hMailServerLibs)\msvc\v143\x86_64\openssl\ms;$(hMailServerLibs)\msvc\v143\x86_64\postgres\include;$(hMailServerLibs)\\msvc\v143\x86_64\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(hMailServerLibs)\msvc\v143\x86_64\openssl\include;$(hMailServerLibs)\msvc\v143\x86_64\openssl\ms;$(hMailServerLibs)\msvc\v143\x86_64\postgres\include;$(hMailServerLibs)\msvc\v143\x86_64\boost\include;$(hMailServerLibs)\msvc\v143\x86_64\cares\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;UNICODE;_UNICODE;VC_EXTRALEAN;BOOST_DATE_TIME_NO_LIB;_SCL_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -388,9 +388,9 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>IPHlpAPI.lib;Dnsapi.lib;Ws2_32.lib;libpq.lib;libcrypto.lib;libssl.lib;crypt32.lib;Secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IPHlpAPI.lib;Dnsapi.lib;Ws2_32.lib;libpq.lib;libcrypto.lib;libssl.lib;crypt32.lib;Secur32.lib;cares.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)hMailServer.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(hMailServerLibs)\msvc\v143\x86_64\openssl\lib;$(hMailServerLibs)\msvc\v143\x86_64\postgres\lib;$(hMailServerLibs)\msvc\v143\x86_64\boost\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(hMailServerLibs)\msvc\v143\x86_64\openssl\lib;$(hMailServerLibs)\msvc\v143\x86_64\postgres\lib;$(hMailServerLibs)\msvc\v143\x86_64\boost\lib;$(hMailServerLibs)\msvc\v143\x86_64\cares\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -410,7 +410,7 @@
       </Command>
     </PreBuildEvent>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(hMailServerLibs)\msvc\v143\i686\openssl\include;$(hMailServerLibs)\msvc\v143\i686\openssl\ms;$(hMailServerLibs)\msvc\v143\i686\postgres\include;$(hMailServerLibs)\\msvc\v143\i686\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(hMailServerLibs)\msvc\v143\i686\openssl\include;$(hMailServerLibs)\msvc\v143\i686\openssl\ms;$(hMailServerLibs)\msvc\v143\i686\postgres\include;$(hMailServerLibs)\msvc\v143\i686\boost\include;$(hMailServerLibs)\msvc\v143\i686\cares\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;UNICODE;_UNICODE;VC_EXTRALEAN;BOOST_DATE_TIME_NO_LIB;_SCL_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;STRICT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Async</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -429,9 +429,9 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>libcrypto.lib;libssl.lib;IPHlpAPI.lib;Dnsapi.lib;Ws2_32.lib;libpq.lib;crypt32.lib;Secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcrypto.lib;libssl.lib;IPHlpAPI.lib;Dnsapi.lib;Ws2_32.lib;libpq.lib;crypt32.lib;Secur32.lib;cares.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)hMailServer.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(hMailServerLibs)\msvc\v143\i686\openssl\lib;$(hMailServerLibs)\msvc\v143\i686\postgres\lib;$(hMailServerLibs)\msvc\v143\i686\boost\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(hMailServerLibs)\msvc\v143\i686\openssl\lib;$(hMailServerLibs)\msvc\v143\i686\postgres\lib;$(hMailServerLibs)\msvc\v143\i686\boost\lib;$(hMailServerLibs)\msvc\v143\i686\cares\lib</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
