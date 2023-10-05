@@ -1,0 +1,21 @@
+#pragma once
+
+namespace HM
+{
+   class MessageData;
+   class SURBLServer;
+
+   class SURBL
+   {
+   public:
+      SURBL(void);
+      ~SURBL(void);
+
+      bool Run(std::shared_ptr<SURBLServer> pSURBLServer, std::shared_ptr<MessageData> pMessageData);
+
+   private:
+
+      void CleanURL_(String &sURL) const;
+      bool CleanHost_(String &sDomain) const;
+   };
+}

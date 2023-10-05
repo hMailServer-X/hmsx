@@ -1,0 +1,57 @@
+#VS-Path settings
+
+#Debug Path (to find external DLL dependencies
+PATH=$(hMailServerLibs)\msvc\vc143\x86_64\openssl\bin;$(hMailServerLibs)\msvc\v143\x86_64\postgres\lib;$(ProjectDir);$(Path)
+
+
+#Include path
+$(hMailServerLibs)\msvc\vc143\x86_64\openssl\include
+$(hMailServerLibs)\msvc\vc143\x86_64\postgres\include
+$(hMailServerLibs)\msvc\vc143\x86_64\boost\include 
+
+
+
+#Library path
+$(hMailServerLibs)\msvc\vc143\x86_64\openssl\lib
+$(hMailServerLibs)\msvc\vc143\x86_64\postgres\lib
+$(hMailServerLibs)\msvc\vc143\x86_64\boost\stage\lib
+
+
+#Building BOOST MSVC
+bootstrap
+b2 debug release threading=multi link=static --disable-warnings --quiet --disable-docs --disable-examples --disable-tests --without-python --disable-qrencode --toolset=msvc address-model=64 stage -j 4
+
+b2 debug release threading=multi link=static --disable-warnings --quiet --disable-docs --disable-examples --disable-tests --without-python --disable-qrencode --toolset=msvc address-model=64 stage -j 4
+b2 install --prefix=out64
+
+
+
+vc141_xp
+mkdir %hMailServerLibs%\boost_build && cd %hMailServerLibs%\boost_build 
+tar xzvf ..\src\archive\boost_1_83_0.tar.gz --strip-components=1
+
+
+b2 debug release threading=multi link=static --with-system --with-filesystem --with-regex --with-asio --prefix=out64 
+
+b2 --show-libraries
+
+#Make sure ASIO dpendencies are maintained
+
+b2 --with-system  debug release threading=multi link=static --with-thread --with-date_time --with-regex --with-serialization address-model=64 --prefix=../boost
+
+b2 --with-system  debug release threading=multi link=static --with-thread --with-date_time --with-regex --with-serialization address-model=64 --enable=asio -d1
+
+b2 --quiet --with-system  debug release threading=multi link=static --with-thread --with-date_time --with-regex --with-serialization --enable=asio address-model=64 --build-dir=build--stagedir=%hMailServerLibs%\msvc\v143\x86_64\boost
+
+b2 --quiet variant=debug,release threading=multi link=static --with-system --with-thread --with-date_time --with-regex --with-serialization --enable=asio address-model=64 --build-dir=build --stagedir=%hMailServerLibs%\msvc\v143\x86_64\boost
+
+b2 --quiet --with-system debug release threading=multi link=static --with-thread --with-date_time --with-regex --with-serialization --enable-asio address-model=64 --build-dir=build --stagedir=%hMailServerLibs%\msvc\v143\x86_64\boost
+
+##
+b2 --with-system --with-thread --with-date_time --with-regex --with-serialization --enable-asio address-model=64 --build-dir=build --stagedir=%hMailServerLibs%\msvc\v143\x86_64\boost
+##
+
+mkdir %hMailServerLibs%\msvc\v143\x86_64\boost\include && copy /Y boost\*.* %hMailServerLibs%\msvc\v143\x86_64\boost\include
+
+Perl Configure no-asm VC-WIN32 --prefix="%hMailServerLibs%\msvc\v143\i686\openssl" --openssldir="%hMailServerLibs%\msvc\v143\i686\openssl"
+nmake clean  && nmake install_sw
