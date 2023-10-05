@@ -1,6 +1,5 @@
-﻿# CMakeList.txt : CMake project for hMailServerX, include source and define
-# project specific logic here.
-#
+﻿# CMake project for hMSX
+
 cmake_minimum_required (VERSION 3.8)
 
 # Enable Hot Reload for MSVC compilers if supported.
