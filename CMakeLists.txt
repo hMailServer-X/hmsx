@@ -13,14 +13,13 @@ project ("hMailServerX")
 
 set(CMAKE_CXX_STANDARD 14)
 
-# Set the path to your custom OpenSSL installation
+# Set the path to OpenSSL Library
 set(OPENSSL_ROOT_DIR "../hMailLibs/msvc/v143/x86_64/openssl")
 
 # Find OpenSSL package
 find_package(OpenSSL REQUIRED)
 
-
-# Set the path to your custom BOOST Framework
+# Set the path to the BOOST Framework
 set(BOOST_ROOT "../hMailLibs/msvc/v143/x86_64/boost_1_83_0")
 
 # Find BOOST package
@@ -381,7 +380,8 @@ set(HEADER_FILES
 
 )
 
-# List of Quellcode files
+# List of Source code files
+
 set(SOURCE_FILES
     "COMMON/AntiSpam/AntiSpamConfiguration.cpp"
     "COMMON/AntiSpam/DKIM/Canonicalization.cpp"
@@ -721,8 +721,8 @@ set(SOURCE_FILES
 # Add source to this project's executable.
 add_executable(hMailServerX
     
-    ${HEADER_FILES} # Verweisen auf die Header-Dateien
-    ${SOURCE_FILES} # Verweisen auf die Quellcode-Dateien
+    ${HEADER_FILES} # Refence to Header files
+    ${SOURCE_FILES} # Refernce to Source code files
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
@@ -735,6 +735,7 @@ target_link_libraries(hMailServerX PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 # Include BOOST headers
 target_include_directories(hMailServerX PRIVATE ${Boost_INCLUDE_DIRS})
 
-# Link BOOST libraries (z.B. BOOST Thread)
+# Link BOOST required libraries (e.g. BOOST Thread)
 find_package(Boost COMPONENTS thread REQUIRED)
 target_link_libraries(hMailServerX PRIVATE ${Boost_LIBRARIES})
+
