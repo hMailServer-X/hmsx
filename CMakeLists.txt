@@ -14,23 +14,11 @@ if(MSVC)
 	add_definitions(-DNOMINMAX)
 	add_definitions(-DBOOST_DATE_TIME_NO_LIB)
 	add_definitions(-DSTRICT)
-    
-    #string(REGEX REPLACE "/permissive-" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
 
 
-# Read the hMailServerLibs System variable 
-set(HMAIL_SERVER_LIBS "$ENV{hMailServerLibs}")
-
-# Set the path to OpenSSL Library
-set(OPENSSL_ROOT_DIR "${HMAIL_SERVER_LIBS}/msvc/v143/x86_64/openssl")
-
 # Find OpenSSL package
 find_package(OpenSSL REQUIRED)
-
-# Set the path to the BOOST Framework
-set(BOOST_ROOT "${HMAIL_SERVER_LIBS}/msvc/v143/x86_64/boost/include/boost")
-set(Boost_INCLUDE_DIR "${HMAIL_SERVER_LIBS}/msvc/v143/x86_64/boost/include")
 
 # Find BOOST package
 find_package(Boost REQUIRED COMPONENTS thread)
