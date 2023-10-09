@@ -386,9 +386,8 @@ set(HEADER_FILES
     "SMTP/SMTPMessageHeaderCreator.h"
     "SMTP/SMTPVacationMessageCreator.h"
     "SMTP/SMTPVirusNotifier.h"
-    "SMTP/SPF/Rmspf.h"
-    "SMTP/SPF/SPF.h"
-    "../../hMailLibs/msvc/v143/x86_64/openssl//ms/applink.c"
+    "SMTP/SPF/RMSPF.H"
+    "SMTP/SPF/SPF.h"  
     "Start/pch.h"
     
 
@@ -732,21 +731,17 @@ set(SOURCE_FILES
     "Start/hMailServer.cpp"
 )
 
-
 # Add source to this project's executable.
-add_executable(hMailServerX 	
-	
-    ${HEADER_FILES} # Refence to Header files    
+add_executable(hMailServerX
+	${HEADER_FILES} # Refence to Header files    
     ${SOURCE_FILES} # Refernce to Source code files
 )
 
 set_target_properties(hMailServerX PROPERTIES LANGUAGE CXX)
 
-
 target_precompile_headers(hMailServerX PRIVATE Start/pch.h)
 
 # Link libraries to executable
-
 target_include_directories(hMailServerX PRIVATE ${A_HEADER_FILES} )
 target_include_directories(hMailServerX PRIVATE ${Boost_INCLUDE_DIRS} )
 
