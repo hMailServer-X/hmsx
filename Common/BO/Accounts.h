@@ -7,7 +7,6 @@
 
 namespace HM
 {
-
    class Account;
    class PersistentAccount;
 

@@ -1,8 +1,5 @@
-// header.h
-#ifndef HEADER_H
-#define HEADER_H
+#pragma once
 
-#include <iostream>
 #include <mutex>
 
 // Global variables
@@ -22,5 +19,3 @@ int readGlobalVariable();
 void writeIniPath(std::string value);
 std::string readIniPath();
 
-
-#endif // HEADER_H

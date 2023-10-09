@@ -1,6 +1,5 @@
 #include "pch.h"
-#include <iostream>
-#include <string>
+
 #include "../Common/Util/Utilities.h"
 #include "../Common/Util/runtime_variables.h"
 
@@ -45,13 +44,13 @@ int main(int argc, char* argv[])
 
             writeIniPath(value);  // pass args via a safe mutex variable
 
-
- /*           int status = ares_library_init(ARES_LIB_INIT_ALL);
+/*
+            int status = ares_library_init(ARES_LIB_INIT_ALL);
             if (status != ARES_SUCCESS)
             {
                 printf("C-ARES initialized.\n");                
-            }*/
-
+            }
+*/
             InitializeApplication(value);     
             return 1;
         }

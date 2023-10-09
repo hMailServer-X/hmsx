@@ -1,60 +1,11 @@
 #define SS_DANGEROUS_FORMAT
 #define SS_ANSI
 
-#if defined(_MSC_VER) && (_MSC_VER > 1100)
-	#pragma once
-	#pragma component(browser, off, references, "CStdString")
-#endif
-
-
 #ifndef STDSTRING_H
 #define STDSTRING_H
 
-#define SS_IS_INTRESOURCE(_r) (false)
-
-#if !defined (SS_ANSI) && defined(_MSC_VER)
-	#undef SS_IS_INTRESOURCE
-	#if defined(_WIN64)
-		#define SS_IS_INTRESOURCE(_r) (((unsigned long long)(_r) >> 16) == 0)
-	#else
-		#define SS_IS_INTRESOURCE(_r) (((unsigned long)(_r) >> 16) == 0)
-	#endif
-#endif
-
-
-#ifdef SS_ALLOW_UNSIGNED_CHARS
-	#define SS_UNSIGNED
-#endif
-
-#define SS_SAFE_FORMAT 
-
-#if defined(_MSC_VER) || defined(__BORLANDC__) || defined(_WIN32)
+#if defined(_MSC_VER) || defined(_WIN32)
     #define SS_WIN32
-#endif
-
-#ifndef SS_WIN32
-    #if !defined(SS_NO_ANSI)
-        #define SS_ANSI
-    #endif
-#endif
-
-#if defined(_MSC_VER) && !defined(SS_ANSI)
-	#define SS_ALLOCA
-#endif
-
-#ifdef _MBCS
-	#define SS_MBCS
-#endif
-
-#ifdef _MSC_VER
-	#if defined (_UNICODE) && !defined (UNICODE)
-		#error UNICODE defined  but not UNICODE
-	//	#define UNICODE  // no longer silently fix this
-	#endif
-	#if defined (UNICODE) && !defined (_UNICODE)
-		#error Warning, UNICODE defined  but not _UNICODE
-	//	#define _UNICODE  // no longer silently fix this
-	#endif
 #endif
 
 template<class Type>
@@ -76,22 +27,6 @@ inline const Type& SSMAX(const Type& arg1, const Type& arg2)
 
 			#include <TCHAR.H>
 			#include <WTYPES.H>
-			#ifndef STRICT
-				#define STRICT
-			#endif
-
-		#else
-
-			typedef const char*		PCSTR;
-			typedef char*			PSTR;
-			typedef const wchar_t*	PCWSTR;
-			typedef wchar_t*		PWSTR;
-			#ifdef UNICODE
-				typedef wchar_t		TCHAR;
-			#else
-				typedef char		TCHAR;
-			#endif
-			typedef wchar_t			OLECHAR;
 
 		#endif	// #ifndef _WIN32
 
@@ -99,41 +34,9 @@ inline const Type& SSMAX(const Type& arg1, const Type& arg2)
 			#include <assert.h>
 			#define ASSERT(f) assert((f))
 		#endif
-		#ifndef VERIFY
-			#ifdef _DEBUG
-				#define VERIFY(x) ASSERT((x))
-			#else
-				#define VERIFY(x) x
-			#endif
-		#endif
-
-	#else // ...else SS_ANSI is NOT defined
-
-		#include <TCHAR.H>
-		#include <WTYPES.H>
-		#ifndef STRICT
-			#define STRICT
-		#endif
-
-		// Make sure ASSERT and verify are defined
-
-		#ifndef ASSERT
-			#include <crtdbg.h>
-			#define ASSERT(f) _ASSERTE((f))
-		#endif
-		#ifndef VERIFY
-			#ifdef _DEBUG
-				#define VERIFY(x) ASSERT((x))
-			#else
-				#define VERIFY(x) x
-			#endif
-		#endif
 
 	#endif // #ifdef SS_ANSI
 
-	#ifndef UNUSED
-		#define UNUSED(x) x
-	#endif
 
 #endif // #ifndef W32BASE_H
 
@@ -151,72 +54,15 @@ inline const Type& SSMAX(const Type& arg1, const Type& arg2)
 	#define SS_NOTHROW
 #endif
 
-#ifndef TRACE
-	#define TRACE_DEFINED_HERE
-	#define TRACE
-#endif
-
-#if !defined(PCTSTR) && !defined(PCTSTR_DEFINED)
-	typedef const TCHAR*			PCTSTR;
-	#define PCTSTR_DEFINED
-#endif
-
-#if !defined(PCOLESTR) && !defined(PCOLESTR_DEFINED)
-	typedef const OLECHAR*			PCOLESTR;
-	#define PCOLESTR_DEFINED
-#endif
-
-#if !defined(POLESTR) && !defined(POLESTR_DEFINED)
-	typedef OLECHAR*				POLESTR;
-	#define POLESTR_DEFINED
-#endif
-
-#if !defined(PCUSTR) && !defined(PCUSTR_DEFINED)
-	typedef const unsigned char*	PCUSTR;
-	typedef unsigned char*			PUSTR;
-	#define PCUSTR_DEFINED
-#endif
-
-#if defined(__sgi)
-    typedef unsigned long           DWORD;
-    typedef void *                  LPCVOID;
-#endif
-
-#ifndef schMSG
-	#define schSTR(x)	   #x
-	#define schSTR2(x)	schSTR(x)
-	#define schMSG(desc) message(__FILE__ "(" schSTR2(__LINE__) "):" #desc)
-#endif
-
 #ifndef SS_USE_FACET
 
-	#if defined(__SGI_STL_PORT) && (__SGI_STL_PORT >= 0x400 )
-
-		#if defined(__STL_NO_EXPLICIT_FUNCTION_TMPL_ARGS) && defined(_MSC_VER)
-			#ifdef SS_ANSI
-				#pragma schMSG(__STL_NO_EXPLICIT_FUNCTION_TMPL_ARGS defined!!)
-			#endif
-		#endif
-		#define SS_USE_FACET(loc, fac) std::use_facet<fac >(loc)
-
-	#elif defined(_MSC_VER )
-
-		//#define SS_USE_FACET(loc, fac) std::_USE(loc, fac)
-		#define SS_USE_FACET(loc, fac) std::use_facet<fac >(loc)
-
-	// ...and
-	#elif defined(_RWSTD_NO_TEMPLATE_ON_RETURN_TYPE)
-
-        #define SS_USE_FACET(loc, fac) std::use_facet(loc, (fac*)0)
-
-	#else
-
+	#if defined(_MSC_VER )
+	
 		#define SS_USE_FACET(loc, fac) std::use_facet<fac >(loc)
 
 	#endif
 
 #endif
-
 
 #include <wchar.h>      // Added to Std Library with Amendment #1.
 #include <stdio.h>
@@ -224,9 +70,6 @@ inline const Type& SSMAX(const Type& arg1, const Type& arg2)
 #include <wctype.h>
 #include <ctype.h>
 #include <stdlib.h>
-#ifndef va_start
-	#include <varargs.h>
-#endif
 
 typedef std::codecvt<wchar_t, char, mbstate_t> SSCodeCvt;
 
@@ -263,11 +106,7 @@ inline PWSTR StdCodeCvt(PWSTR pDstW, int nDst, PCSTR pSrcA, int nSrc,
 	}
     return pDstW;
 }
-inline PWSTR StdCodeCvt(PWSTR pDstW, int nDst, PCUSTR pSrcA, int nSrc,
-    const std::locale& loc=std::locale())
-{
-    return StdCodeCvt(pDstW, nDst, (PCSTR)pSrcA, nSrc, loc);
-}
+
 
 inline PSTR StdCodeCvt(PSTR pDstA, int nDst, PCWSTR pSrcW, int nSrc,
     const std::locale& loc=std::locale())
@@ -300,165 +139,8 @@ inline PSTR StdCodeCvt(PSTR pDstA, int nDst, PCWSTR pSrcW, int nSrc,
 	}
     return pDstA;
 }
-inline PUSTR StdCodeCvt(PUSTR pDstA, int nDst, PCWSTR pSrcW, int nSrc,
-    const std::locale& loc=std::locale())
-{
-    return (PUSTR)StdCodeCvt((PSTR)pDstA, nDst, pSrcW, nSrc, loc);
-}
 
-#if defined(SS_ALLOCA) && !defined SS_NO_CONVERSION
 
-    #include <malloc.h>	
-
-    #ifdef _CONVERSION_USES_THREAD_LOCALE
-
-	    #ifndef _DEBUG
-		    #define SSCVT int _cvt; _cvt; UINT _acp=GetACP(); \
-			    _acp; PCWSTR _pw; _pw; PCSTR _pa; _pa
-	    #else
-		    #define SSCVT int _cvt = 0; _cvt; UINT _acp=GetACP();\
-			     _acp; PCWSTR _pw=0; _pw; PCSTR _pa=0; _pa
-	    #endif
-	    #define SSA2W(pa) (\
-		    ((_pa = pa) == 0) ? 0 : (\
-			    _cvt = (sslen(_pa)),\
-			    StdCodeCvt((PWSTR) _alloca((_cvt+1)*2), (_cvt+1)*2, \
-							_pa, _cvt, _acp)))
-	    #define SSW2A(pw) (\
-		    ((_pw = pw) == 0) ? 0 : (\
-			    _cvt = sslen(_pw), \
-			    StdCodeCvt((LPSTR) _alloca((_cvt+1)*2), (_cvt+1)*2, \
-					_pw, _cvt, _acp)))
-	#else
-
-	    #ifndef _DEBUG
-		    #define SSCVT int _cvt; _cvt; UINT _acp=CP_ACP; _acp;\
-			     PCWSTR _pw; _pw; PCSTR _pa; _pa
-	    #else
-		    #define SSCVT int _cvt = 0; _cvt; UINT _acp=CP_ACP; \
-			    _acp; PCWSTR _pw=0; _pw; PCSTR _pa=0; _pa
-	    #endif
-	    #define SSA2W(pa) (\
-		    ((_pa = pa) == 0) ? 0 : (\
-			    _cvt = (sslen(_pa)),\
-			    StdCodeCvt((PWSTR) _alloca((_cvt+1)*2), (_cvt+1)*2, \
-					_pa, _cvt)))
-	    #define SSW2A(pw) (\
-		    ((_pw = pw) == 0) ? 0 : (\
-			    _cvt = (sslen(_pw)),\
-			    StdCodeCvt((LPSTR) _alloca((_cvt+1)*2), (_cvt+1)*2, \
-					_pw, _cvt)))
-    #endif
-
-    #define SSA2CW(pa) ((PCWSTR)SSA2W((pa)))
-    #define SSW2CA(pw) ((PCSTR)SSW2A((pw)))
-
-    #ifdef UNICODE
-	    #define SST2A	SSW2A
-	    #define SSA2T	SSA2W
-	    #define SST2CA	SSW2CA
-	    #define SSA2CT	SSA2CW
-	    inline PWSTR	SST2W(PTSTR p)			{ return p; }
-	    inline PTSTR	SSW2T(PWSTR p)			{ return p; }
-	    inline PCWSTR	SST2CW(PCTSTR p)		{ return p; }
-	    inline PCTSTR	SSW2CT(PCWSTR p)		{ return p; }
-    #else
-	    #define SST2W	SSA2W
-	    #define SSW2T	SSW2A
-	    #define SST2CW	SSA2CW
-	    #define SSW2CT	SSW2CA
-	    inline PSTR		SST2A(PTSTR p)			{ return p; }
-	    inline PTSTR	SSA2T(PSTR p)			{ return p; }
-	    inline PCSTR	SST2CA(PCTSTR p)		{ return p; }
-	    inline PCTSTR	SSA2CT(PCSTR p)			{ return p; }
-    #endif // #ifdef UNICODE
-
-    #if defined(UNICODE)
-    // in these cases the default (TCHAR) is the same as OLECHAR
-	    inline PCOLESTR	SST2COLE(PCTSTR p)		{ return p; }
-	    inline PCTSTR	SSOLE2CT(PCOLESTR p)	{ return p; }
-	    inline POLESTR	SST2OLE(PTSTR p)		{ return p; }
-	    inline PTSTR	SSOLE2T(POLESTR p)		{ return p; }
-    #elif defined(OLE2ANSI)
-    // in these cases the default (TCHAR) is the same as OLECHAR
-	    inline PCOLESTR	SST2COLE(PCTSTR p)		{ return p; }
-	    inline PCTSTR	SSOLE2CT(PCOLESTR p)	{ return p; }
-	    inline POLESTR	SST2OLE(PTSTR p)		{ return p; }
-	    inline PTSTR	SSOLE2T(POLESTR p)		{ return p; }
-    #else
-	    //CharNextW doesn't work on Win95 so we use this
-	    #define SST2COLE(pa)	SSA2CW((pa))
-	    #define SST2OLE(pa)		SSA2W((pa))
-	    #define SSOLE2CT(po)	SSW2CA((po))
-	    #define SSOLE2T(po)		SSW2A((po))
-    #endif
-
-    #ifdef OLE2ANSI
-	    #define SSW2OLE		SSW2A
-	    #define SSOLE2W		SSA2W
-	    #define SSW2COLE	SSW2CA
-	    #define SSOLE2CW	SSA2CW
-	    inline POLESTR		SSA2OLE(PSTR p)		{ return p; }
-	    inline PSTR			SSOLE2A(POLESTR p)	{ return p; }
-	    inline PCOLESTR		SSA2COLE(PCSTR p)	{ return p; }
-	    inline PCSTR		SSOLE2CA(PCOLESTR p){ return p; }
-    #else
-	    #define SSA2OLE		SSA2W
-	    #define SSOLE2A		SSW2A
-	    #define SSA2COLE	SSA2CW
-	    #define SSOLE2CA	SSW2CA
-	    inline POLESTR		SSW2OLE(PWSTR p)	{ return p; }
-	    inline PWSTR		SSOLE2W(POLESTR p)	{ return p; }
-	    inline PCOLESTR		SSW2COLE(PCWSTR p)	{ return p; }
-	    inline PCWSTR		SSOLE2CW(PCOLESTR p){ return p; }
-    #endif
-
-    // Above we've defined macros that look like MS' but all have
-    // an 'SS' prefix.  Now we need the real macros.  We'll either
-    // get them from the macros above or from MFC/ATL. 
-
-	#if defined (USES_CONVERSION)
-
-		#define _NO_STDCONVERSION	// just to be consistent
-
-	#else
-
-		#ifdef _MFC_VER
-
-			#include <afxconv.h>
-			#define _NO_STDCONVERSION // just to be consistent
-
-		#else
-
-			#define USES_CONVERSION SSCVT
-			#define A2CW			SSA2CW
-			#define W2CA			SSW2CA
-			#define T2A				SST2A
-			#define A2T				SSA2T
-			#define T2W				SST2W
-			#define W2T				SSW2T
-			#define T2CA			SST2CA
-			#define A2CT			SSA2CT
-			#define T2CW			SST2CW
-			#define W2CT			SSW2CT
-			#define ocslen			sslen
-			#define ocscpy			sscpy
-			#define T2COLE			SST2COLE
-			#define OLE2CT			SSOLE2CT
-			#define T2OLE			SST2COLE
-			#define OLE2T			SSOLE2CT
-			#define A2OLE			SSA2OLE
-			#define OLE2A			SSOLE2A
-			#define W2OLE			SSW2OLE
-			#define OLE2W			SSOLE2W
-			#define A2COLE			SSA2COLE
-			#define OLE2CA			SSOLE2CA
-			#define W2COLE			SSW2COLE
-			#define OLE2CW			SSOLE2CW
-	
-		#endif // #ifdef _MFC_VER
-	#endif // #ifndef USES_CONVERSION
-#endif // #ifndef SS_NO_CONVERSION
 
 #if !defined(ostring) && !defined(OSTRING_DEFINED)
 	typedef std::basic_string<OLECHAR> ostring;
@@ -479,14 +161,7 @@ inline PSTR StdCodeCvt(PSTR pDst, int nDst, PCSTR pSrc, int nSrc)
 
 	return pDst;
 }
-inline PSTR StdCodeCvt(PSTR pDst, int nDst, PCUSTR pSrc, int nSrc)
-{
-	return StdCodeCvt(pDst, nDst, (PCSTR)pSrc, nSrc);
-}
-inline PUSTR StdCodeCvt(PUSTR pDst, int nDst, PCSTR pSrc, int nSrc)
-{
-	return (PUSTR)StdCodeCvt((PSTR)pDst, nDst, pSrc, nSrc);
-}
+
 
 inline PWSTR StdCodeCvt(PWSTR pDst, int nDst, PCWSTR pSrc, int nSrc)
 {
@@ -631,7 +306,7 @@ inline void	ssasn(std::string& sDst, PCWSTR pW)
 }
 inline void ssasn(std::string& sDst, const int nNull)
 {
-	UNUSED(nNull);
+
 	ASSERT(nNull==0);
 	sDst.assign("");
 }	
@@ -699,7 +374,6 @@ inline void	ssasn(std::wstring& sDst, PCSTR pA)
 }
 inline void ssasn(std::wstring& sDst, const int nNull)
 {
-	UNUSED(nNull);
 	ASSERT(nNull==0);
 	sDst.assign(L"");
 }
@@ -713,9 +387,7 @@ inline void	ssadd(std::string& sDst, const std::wstring& sSrc)
 		int nDst	= static_cast<int>(sDst.size());
 		int nAdd	= nSrc;
 
-#ifdef SS_MBCS
-		nAdd		= static_cast<int>(static_cast<double>(nAdd) * 1.3);
-#endif
+
 
 		sDst.resize(nDst+nAdd+1);
 		PCSTR szCvt = StdCodeCvt(const_cast<SS_PTRTYPE>(sDst.data()+nDst),
@@ -741,20 +413,12 @@ inline void	ssadd(std::string& sDst, PCWSTR pW)
 		int nDst	= static_cast<int>(sDst.size());
 		int nAdd	= nSrc;
 
-#ifdef SS_MBCS
-		nAdd	= static_cast<int>(static_cast<double>(nAdd) * 1.3);
-#endif
 
 		sDst.resize(nDst + nAdd + 1);
 		PCSTR szCvt = StdCodeCvt(const_cast<SS_PTRTYPE>(sDst.data()+nDst),
 			nAdd, pW, nSrc);
 
-#ifdef SS_MBCS
-		sDst.resize(nDst + sslen(szCvt));
-#else
-		sDst.resize(nDst + nSrc);
-		szCvt;
-#endif
+
 	}
 }
 inline void	ssadd(std::string& sDst, PCSTR pA)
@@ -889,14 +553,7 @@ inline void ssupr(CT* pT, size_t nLen, const std::locale& loc=std::locale())
 	}
 
 #if defined (SS_WIN32) && !defined(SS_ANSI)
-	inline int ssload(HMODULE hInst, UINT uId, PSTR pBuf, int nMax)
-	{
-		return ::LoadStringA(hInst, uId, pBuf, nMax);
-	}
-	inline int ssload(HMODULE hInst, UINT uId, PWSTR pBuf, int nMax)
-	{
-		return ::LoadStringW(hInst, uId, pBuf, nMax);
-	}
+
 #endif
 
 template <typename CT>
@@ -921,24 +578,6 @@ inline int ssicoll(const CT* sz1, int nLen1, const CT* sz2, int nLen2)
 	return coll.compare(s2.c_str(), s2.c_str()+nLen2,
 						s1.c_str(), s1.c_str()+nLen1);
 }
-
-#if defined (SS_WIN32) && !defined(SS_ANSI)
-	inline DWORD ssfmtmsg(DWORD dwFlags, LPCVOID pSrc, DWORD dwMsgId,
-						  DWORD dwLangId, PSTR pBuf, DWORD nSize,
-						  va_list* vlArgs)
-	{ 
-		return FormatMessageA(dwFlags, pSrc, dwMsgId, dwLangId,
-							  pBuf, nSize,vlArgs);
-	}
-	inline DWORD ssfmtmsg(DWORD dwFlags, LPCVOID pSrc, DWORD dwMsgId,
-						  DWORD dwLangId, PWSTR pBuf, DWORD nSize,
-						  va_list* vlArgs)
-	{
-		return FormatMessageW(dwFlags, pSrc, dwMsgId, dwLangId,
-							  pBuf, nSize,vlArgs);
-	}
-#else
-#endif
  
 template<typename CT1, typename CT2>
 inline int sscpycvt(CT1* pDst, const CT2* pSrc, int nMax)
@@ -1185,11 +824,7 @@ public:
 	}
 
 #ifdef SS_UNSIGNED
-	MYTYPE& operator=(PCUSTR pU)
-	{
-		ssasn(*this, reinterpret_cast<PCSTR>(pU));
-		return *this;
-	}
+
 #endif
 
 	MYTYPE& operator=(CT t)
@@ -1213,101 +848,7 @@ public:
 				return *this;
 			}
 		}
-	#endif
-
-	#if ( defined(_MSC_VER) && ( _MSC_VER < 1200 ) ) || defined(SS_NO_REFCOUNT) 
-
-		MYTYPE& assign(const MYTYPE& str)
-		{
-			Q172398(*this);
-			sscpy(GetBuffer(str.size()+1), SSREF(str));
-			this->ReleaseBuffer(str.size());
-			return *this;
-		}
-
-		MYTYPE& assign(const MYTYPE& str, MYSIZE nStart, MYSIZE nChars)
-		{
-			nChars		= SSMIN(nChars, str.length() - nStart);
-			MYTYPE strTemp(str.c_str()+nStart, nChars);
-			Q172398(*this);
-			this->assign(strTemp);
-			return *this;
-		}
-
-		MYTYPE& assign(const MYBASE& str)
-		{
-			ssasn(*this, str);
-			return *this;
-		}
-
-		MYTYPE& assign(const MYBASE& str, MYSIZE nStart, MYSIZE nChars)
-		{
-			// This overload of basic_string::assign is supposed to assign up to
-			// <nChars> or the NULL terminator, whichever comes first.  Since we
-			// are about to call a less forgiving overload (in which <nChars>
-			// must be a valid length), we must adjust the length here to a safe
-			// value. Thanks to Ullrich Poll�hne for catching this bug
-
-			nChars		= SSMIN(nChars, str.length() - nStart);
-
-			// Watch out for assignment to self
-
-			if ( this == &str )
-			{
-				MYTYPE strTemp(str.c_str() + nStart, nChars);
-				static_cast<MYBASE*>(this)->assign(strTemp);
-			}
-			else
-			{
-				Q172398(*this);
-				static_cast<MYBASE*>(this)->assign(str.c_str()+nStart, nChars);
-			}
-			return *this;
-		}
-
-		MYTYPE& assign(const CT* pC, MYSIZE nChars)
-		{
-			// Q172398 only fix -- erase before assigning, but not if we're
-			// assigning from our own buffer
-
-	#if defined ( _MSC_VER ) && ( _MSC_VER < 1200 )
-			if ( !this->empty() &&
-				( pC < this->data() || pC > this->data() + this->capacity() ) )
-			{
-				this->erase();
-			}
-	#endif
-			Q172398(*this);
-			static_cast<MYBASE*>(this)->assign(pC, nChars);
-			return *this;
-		}
-
-		MYTYPE& assign(MYSIZE nChars, MYVAL val)
-		{
-			Q172398(*this);
-			static_cast<MYBASE*>(this)->assign(nChars, val);
-			return *this;
-		}
-
-		MYTYPE& assign(const CT* pT)
-		{
-			return this->assign(pT, MYBASE::traits_type::length(pT));
-		}
-
-		MYTYPE& assign(MYCITER iterFirst, MYCITER iterLast)
-		{
-	#if defined ( _MSC_VER ) && ( _MSC_VER < 1200 ) 
-			// Q172398 fix.  don't call erase() if we're assigning from ourself
-			if ( iterFirst < this->begin() ||
-                 iterFirst > this->begin() + this->size() )
-            {
-				this->erase()
-            }
-	#endif
-			this->replace(this->begin(), this->end(), iterFirst, iterLast);
-			return *this;
-		}
-	#endif
+	#endif		
 
 	MYTYPE& operator+=(const MYTYPE& str)
 	{
@@ -1417,536 +958,15 @@ public:
 
 #ifndef SS_ANSI
 
-	bool Load(UINT nId, HMODULE hModule=NULL)
-	{
-		bool bLoaded		= false;	// set to true of we succeed.
-
-	#ifdef _MFC_VER		// When in Rome (or MFC land)...
-
-		HMODULE hModuleOld = NULL;
-
-		if ( NULL != hModule )
-		{
-			hModuleOld = AfxGetResourceHandle();
-			AfxSetResourceHandle(hModule);
-		}
-
-		// ...load the string
-
-		CString strRes;
-		bLoaded				= FALSE != strRes.LoadString(nId);
-
-		// ...and if we set the resource handle, restore it.
-
-		if ( NULL != hModuleOld )
-			AfxSetResourceHandle(hModule);
-
-		if ( bLoaded )
-			*this			= strRes;
-
-	#else // otherwise make our own hackneyed version of CString's Load
-		
-		// Get the resource name and module handle
-
-		if ( NULL == hModule )
-			hModule			= GetResourceHandle();
-
-		PCTSTR szName		= MAKEINTRESOURCE((nId>>4)+1); // lifted 
-		DWORD dwSize		= 0;
-
-		// No sense continuing if we can't find the resource
-
-		HRSRC hrsrc			= ::FindResource(hModule, szName, RT_STRING);
-
-		if ( NULL == hrsrc )
-		{
-			TRACE(PLATFORM_STRING("Cannot find resource %d: 0x%X"), nId, ::GetLastError());
-		}
-		else if ( 0 == (dwSize = ::SizeofResource(hModule, hrsrc) / sizeof(CT)))
-		{
-			TRACE(PLATFORM_STRING("Cant get size of resource %d 0x%X\n"),nId,GetLastError());
-		}
-		else
-		{
-			bLoaded			= 0 != ssload(hModule, nId, GetBuf(dwSize), dwSize);
-			ReleaseBuffer();
-		}
-
-	#endif  // #ifdef _MFC_VER
-
-		if ( !bLoaded )
-			TRACE(PLATFORM_STRING("String not loaded 0x%X\n"), ::GetLastError());
-
-		return bLoaded;
-	}
-
 #endif  // #ifdef SS_ANSI
 	 
 #ifdef SS_SAFE_FORMAT       
-	void Fmt(const CT* szFmt, ...)
-	{
-		va_list argList;
-		va_start(argList, szFmt);
-		FormatV(szFmt, argList);
-		va_end(argList);
-	}
-
-#ifndef SS_ANSI
-
-    void Format(UINT nId)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) ) 
-            this->swap(strFmt);
-    }
-    template<class A1>
-    void Format(UINT nId, const A1& v)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-            Fmt(strFmt, FmtArg<A1>(v)());
-    }
-    template<class A1, class A2>
-    void Format(UINT nId, const A1& v1, const A2& v2)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-           Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)());
-    }
-    template<class A1, class A2, class A3>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(),FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(),FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-           Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-                FmtArg<A9>(v9)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-                FmtArg<A9>(v9)(), FmtArg<A10>(v10)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-                FmtArg<A9>(v9)(),FmtArg<A10>(v10)(),FmtArg<A11>(v11)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-                FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-                FmtArg<A12>(v12)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-                FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-                FmtArg<A12>(v12)(), FmtArg<A13>(v13)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13, class A14>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13, const A14& v14)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-                FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-                FmtArg<A12>(v12)(), FmtArg<A13>(v13)(),FmtArg<A14>(v14)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13, class A14, class A15>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13, const A14& v14, const A15& v15)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-                FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-                FmtArg<A12>(v12)(),FmtArg<A13>(v13)(),FmtArg<A14>(v14)(),
-                FmtArg<A15>(v15)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13, class A14, class A15, class A16>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13, const A14& v14, const A15& v15,
-                const A16& v16)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-                FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-                FmtArg<A12>(v12)(),FmtArg<A13>(v13)(),FmtArg<A14>(v14)(),
-                FmtArg<A15>(v15)(), FmtArg<A16>(v16)());
-        }
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13, class A14, class A15, class A16, class A17>
-    void Format(UINT nId, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13, const A14& v14, const A15& v15,
-                const A16& v16, const A17& v17)
-    {
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-        {
-            Fmt(strFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-                FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-                FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-                FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-                FmtArg<A12>(v12)(),FmtArg<A13>(v13)(),FmtArg<A14>(v14)(),
-                FmtArg<A15>(v15)(),FmtArg<A16>(v16)(),FmtArg<A17>(v17)());
-        }
-    }
-    
-#endif // #ifndef SS_ANSI
-
-    // ...now the other overload of Format: the one that takes a string literal
-
-    void Format(const CT* szFmt)
-    {
-        *this = szFmt;
-    }
-    template<class A1>
-    void Format(const CT* szFmt, const A1& v)
-    {
-       A1 a = FmtArg<A1>(v)();
-
-        Fmt(szFmt, a);
-    }
-    template<class A1, class A2>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)());
-    }
-    template<class A1, class A2, class A3>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)());
-    }
-    template<class A1, class A2, class A3, class A4>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-            FmtArg<A9>(v9)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-            FmtArg<A9>(v9)(), FmtArg<A10>(v10)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-            FmtArg<A9>(v9)(),FmtArg<A10>(v10)(),FmtArg<A11>(v11)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-            FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-            FmtArg<A12>(v12)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-            FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-            FmtArg<A12>(v12)(), FmtArg<A13>(v13)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13, class A14>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13, const A14& v14)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-            FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-            FmtArg<A12>(v12)(), FmtArg<A13>(v13)(),FmtArg<A14>(v14)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13, class A14, class A15>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13, const A14& v14, const A15& v15)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-            FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-            FmtArg<A12>(v12)(),FmtArg<A13>(v13)(),FmtArg<A14>(v14)(),
-            FmtArg<A15>(v15)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13, class A14, class A15, class A16>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13, const A14& v14, const A15& v15,
-                const A16& v16)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-            FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-            FmtArg<A12>(v12)(),FmtArg<A13>(v13)(),FmtArg<A14>(v14)(),
-            FmtArg<A15>(v15)(), FmtArg<A16>(v16)());
-    }
-    template<class A1, class A2, class A3, class A4, class A5, class A6,
-        class A7, class A8, class A9, class A10, class A11, class A12,
-        class A13, class A14, class A15, class A16, class A17>
-    void Format(const CT* szFmt, const A1& v1, const A2& v2, const A3& v3,
-                const A4& v4, const A5& v5, const A6& v6, const A7& v7,
-                const A8& v8, const A9& v9, const A10& v10, const A11& v11,
-                const A12& v12, const A13& v13, const A14& v14, const A15& v15,
-                const A16& v16, const A17& v17)
-    {
-        Fmt(szFmt, FmtArg<A1>(v1)(), FmtArg<A2>(v2)(),
-            FmtArg<A3>(v3)(), FmtArg<A4>(v4)(), FmtArg<A5>(v5)(),
-            FmtArg<A6>(v6)(), FmtArg<A7>(v7)(), FmtArg<A8>(v8)(),
-            FmtArg<A9>(v9)(), FmtArg<A10>(v10)(),FmtArg<A11>(v11)(),
-            FmtArg<A12>(v12)(),FmtArg<A13>(v13)(),FmtArg<A14>(v14)(),
-            FmtArg<A15>(v15)(),FmtArg<A16>(v16)(),FmtArg<A17>(v17)());
-    }
-
+	
 #else  // #ifdef SS_SAFE_FORMAT
 
-
 #ifndef SS_ANSI
 
-	void Format(UINT nId, ...)
-	{
-		va_list argList;
-		va_start(argList, nId);
 
-		MYTYPE strFmt;
-		if ( strFmt.Load(nId) )
-			FormatV(strFmt, argList);
-
-		va_end(argList);
-	}
     
 #endif  // #ifdef SS_ANSI
 
@@ -2504,110 +1524,6 @@ public:
 	}
 #endif
 
-#ifdef SS_INC_COMDEF
-
-	// struct SSSHDR - useful for non Std C++ persistence schemes.
-	typedef struct SSSHDR
-	{
-		BYTE	byCtrl;
-		ULONG	nChars;
-	} SSSHDR;	// as in "Standard String Stream Header"
-
-	#define SSSO_UNICODE	0x01	// the string is a wide string
-	#define SSSO_COMPRESS	0x02	// the string is compressed
-
-	ULONG StreamSize() const
-	{
-		// Control header plus string
-		ASSERT(this->size()*sizeof(CT) < 0xffffffffUL - sizeof(SSSHDR));
-		return (this->size() * sizeof(CT)) + sizeof(SSSHDR);
-	}
-
-	HRESULT StreamSave(IStream* pStream) const
-	{
-		ASSERT(this->size()*sizeof(CT) < 0xffffffffUL - sizeof(SSSHDR));
-		HRESULT hr		= E_FAIL;
-		ASSERT(pStream != 0);
-		SSSHDR hdr;
-		hdr.byCtrl		= sizeof(CT) == 2 ? SSSO_UNICODE : 0;
-		hdr.nChars		= this->size();
-
-
-		if ( FAILED(hr=pStream->Write(&hdr, sizeof(SSSHDR), 0)) )
-		{
-			TRACE(PLATFORM_STRING("StreamSave: Cannot write control header, ERR=0x%X\n"),hr);
-		}
-		else if ( empty() )
-		{
-			;		// nothing to write
-		}
-		else if ( FAILED(hr=pStream->Write(this->c_str(),
-			this->size()*sizeof(CT), 0)) )
-		{
-			TRACE(PLATFORM_STRING("StreamSave: Cannot write string to stream 0x%X\n"), hr);
-		}
-
-		return hr;
-	}
-
-	HRESULT StreamLoad(IStream* pStream)
-	{
-		ASSERT(pStream != 0);
-		SSSHDR hdr;
-		HRESULT hr			= E_FAIL;
-
-		if ( FAILED(hr=pStream->Read(&hdr, sizeof(SSSHDR), 0)) )
-		{
-			TRACE(PLATFORM_STRING("StreamLoad: Cant read control header, ERR=0x%X\n"), hr);
-		}
-		else if ( hdr.nChars > 0 )
-		{
-			ULONG nRead		= 0;
-			PMYSTR pMyBuf	= BufferSet(hdr.nChars);
-			
-			if ( (hdr.byCtrl & SSSO_UNICODE) != 0 )
-			{
-				ULONG nBytes	= hdr.nChars * sizeof(wchar_t);
-				if ( sizeof(CT) == sizeof(wchar_t) )
-				{
-					if ( FAILED(hr=pStream->Read(pMyBuf, nBytes, &nRead)) )
-						TRACE(PLATFORM_STRING("StreamLoad: Cannot read string: 0x%X\n"), hr);
-				}
-				else
-				{	
-					PWSTR pBufW = reinterpret_cast<PWSTR>(_alloca((nBytes)+1));
-					if ( FAILED(hr=pStream->Read(pBufW, nBytes, &nRead)) )
-						TRACE(PLATFORM_STRING("StreamLoad: Cannot read string: 0x%X\n"), hr);
-					else
-						sscpy(pMyBuf, pBufW, hdr.nChars);
-				}
-			}
-			else
-			{
-				ULONG nBytes	= hdr.nChars * sizeof(char);
-				if ( sizeof(CT) == sizeof(char) )
-				{
-					if ( FAILED(hr=pStream->Read(pMyBuf, nBytes, &nRead)) )
-						TRACE(PLATFORM_STRING("StreamLoad: Cannot read string: 0x%X\n"), hr);
-				}
-				else
-				{
-					PSTR pBufA = reinterpret_cast<PSTR>(_alloca(nBytes));
-					if ( FAILED(hr=pStream->Read(pBufA, hdr.nChars, &nRead)) )
-						TRACE(PLATFORM_STRING("StreamLoad: Cannot read string: 0x%X\n"), hr);
-					else
-						sscpy(pMyBuf, pBufA, hdr.nChars);
-				}
-			}
-		}
-		else
-		{
-			this->erase();
-		}
-		return hr;
-	}
-#endif // #ifdef SS_INC_COMDEF
-
 };
 typedef CStdStr<char>		CStdStringA;	// a better std::string
 typedef CStdStr<wchar_t>	CStdStringW;	// a better std::wstring
@@ -2643,7 +1559,6 @@ inline CStdStringA operator+(PCSTR pA, const CStdStringA& sA)
 	sRet.append(sA);
 	return sRet;
 }
-
 
 inline CStdStringA operator+(const CStdStringA& s1, const CStdStringW& s2)
 {
@@ -2704,132 +1619,9 @@ inline CStdStringW operator+(const CStdStringW& s1, PCSTR pA)
 	return s1 + CStdStringW(pA);
 }
 
-#ifdef SS_SAFE_FORMAT
-
-template<>
-struct FmtArg<CStdStringA>
-{
-    explicit FmtArg(const CStdStringA& arg) : a_(arg) {}
-    PCSTR operator()() const { return a_.c_str(); }
-    const CStdStringA& a_;
-private:
-    FmtArg<CStdStringA>& operator=(const FmtArg<CStdStringA>&) { return *this; }
-};
-template<>
-struct FmtArg<CStdStringW>
-{
-    explicit FmtArg(const CStdStringW& arg) : a_(arg) {}
-    PCWSTR operator()() const { return a_.c_str(); }
-    const CStdStringW& a_;
-private:
-    FmtArg<CStdStringW>& operator=(const FmtArg<CStdStringW>&) { return *this; }
-};
-
-template<>
-struct FmtArg<std::string>
-{
-    explicit FmtArg(const std::string& arg) : a_(arg) {}
-    PCSTR operator()() const { return a_.c_str(); }
-    const std::string& a_;
-private:
-    FmtArg<std::string>& operator=(const FmtArg<std::string>&) { return *this; }
-};
-template<>
-struct FmtArg<std::wstring>
-{
-    explicit FmtArg(const std::wstring& arg) : a_(arg) {}
-    PCWSTR operator()() const { return a_.c_str(); }
-    const std::wstring& a_;
-private:
-    FmtArg<std::wstring>& operator=(const FmtArg<std::wstring>&) {return *this;}
-};
-#endif // #ifdef SS_SAFEFORMAT
-
-inline CStdStringA WUFormatA(PCSTR szFormat, ...)
-{
-	va_list argList;
-	va_start(argList, szFormat);
-	CStdStringA strOut;
-	strOut.FormatV(szFormat, argList);
-	va_end(argList);
-	return strOut;
-}
-inline CStdStringW WUFormatW(PCWSTR szwFormat, ...)
-{
-	va_list argList;
-	va_start(argList, szwFormat);
-	CStdStringW strOut;
-	strOut.FormatV(szwFormat, argList);
-	va_end(argList);
-	return strOut;
-}
-// Define TCHAR based friendly names for some of these functions
-
 typedef CStdStringW				CStdString;
 #define WUSysMessage			WUSysMessageW
 #define WUFormat				WUFormatW
-
-// ...and some shorter names for the space-efficient
-
-#define WUSysMsg					WUSysMessage
-#define WUSysMsgA					WUSysMessageA
-#define WUSysMsgW					WUSysMessageW
-#define WUFmtA						WUFormatA
-#define	WUFmtW						WUFormatW
-#define WUFmt						WUFormat
-#define WULastErrMsg()				WUSysMessage(::GetLastError())
-#define WULastErrMsgA()				WUSysMessageA(::GetLastError())
-#define WULastErrMsgW()				WUSysMessageW(::GetLastError())
-
-#define StdStringLessNoCaseW		SSLNCW	// avoid VC compiler warning 4786
-#define StdStringEqualsNoCaseW		SSENCW		
-#define StdStringLessNoCaseA		SSLNCA		
-#define StdStringEqualsNoCaseA		SSENCA		
-
-#ifdef UNICODE
-	#define StdStringLessNoCase		SSLNCW		
-	#define StdStringEqualsNoCase	SSENCW		
-#else
-	#define StdStringLessNoCase		SSLNCA		
-	#define StdStringEqualsNoCase	SSENCA		
-#endif
-
-struct StdStringLessNoCaseW
-	: std::binary_function<CStdStringW, CStdStringW, bool>
-{
-	inline
-	bool operator()(const CStdStringW& sLeft, const CStdStringW& sRight) const
-	{ return ssicmp(sLeft.c_str(), sRight.c_str()) < 0; }
-};
-struct StdStringEqualsNoCaseW
-	: std::binary_function<CStdStringW, CStdStringW, bool>
-{
-	inline
-	bool operator()(const CStdStringW& sLeft, const CStdStringW& sRight) const
-	{ return ssicmp(sLeft.c_str(), sRight.c_str()) == 0; }
-};
-struct StdStringLessNoCaseA
-	: std::binary_function<CStdStringA, CStdStringA, bool>
-{
-	inline
-	bool operator()(const CStdStringA& sLeft, const CStdStringA& sRight) const
-	{ return ssicmp(sLeft.c_str(), sRight.c_str()) < 0; }
-};
-struct StdStringEqualsNoCaseA
-	: std::binary_function<CStdStringA, CStdStringA, bool>
-{
-	inline
-	bool operator()(const CStdStringA& sLeft, const CStdStringA& sRight) const
-	{ return ssicmp(sLeft.c_str(), sRight.c_str()) == 0; }
-};
-
-// If we had to define our own version of TRACE above, get rid of it now
-
-#ifdef TRACE_DEFINED_HERE
-	#undef TRACE
-	#undef TRACE_DEFINED_HERE
-#endif
-
 
 #endif	// #ifndef STDSTRING_H
 

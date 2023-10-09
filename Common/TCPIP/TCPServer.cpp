@@ -3,7 +3,6 @@
 #include "TCPConnection.h"
 
 #include <ctime>
-#include <iostream>
 #include <string>
 
 #include "../Persistence/PersistentSecurityRange.h"

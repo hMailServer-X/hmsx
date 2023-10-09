@@ -1,11 +1,11 @@
 #include "pch.h"
+
 #include "Account.h"
 #include "Rules.h"
 #include "Messages.h"
 #include "IMAPFolders.h"
 #include "../Util/Crypt.h"
 #include "../Util/Time.h"
-
 #include "FetchAccounts.h"
 
 #include "../../SMTP/SMTPVacationMessageCreator.h"
